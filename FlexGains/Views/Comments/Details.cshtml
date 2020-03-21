@@ -1,0 +1,50 @@
+﻿@model FlexGains.Models.Comment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Comment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CommentDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CommentDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TextBody)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TextBody)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Account.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Account.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Workout.WorkoutName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Workout.WorkoutName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CommentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

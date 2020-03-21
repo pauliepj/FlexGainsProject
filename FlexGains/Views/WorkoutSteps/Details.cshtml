@@ -1,0 +1,58 @@
+﻿@model FlexGains.Models.WorkoutStep
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>WorkoutStep</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkoutOrder)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkoutOrder)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RepsNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RepsNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SetsNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SetsNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Exercise.ExerciseName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Exercise.ExerciseName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Workout.WorkoutName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Workout.WorkoutName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.StepId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

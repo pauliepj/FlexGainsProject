@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FlexGains.Models.Exercise>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ExerciseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExerciseDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MuscleGroup.GroupName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExerciseName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExerciseDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MuscleGroup.GroupName)
+        </td>
+        <td>
+            @if(User.IsInRole("Admin")){
+            <text>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ExerciseId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ExerciseId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ExerciseId })
+            </text>
+            }
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<FlexGains.Models.WorkoutStep>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.WorkoutOrder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RepsNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetsNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Exercise.ExerciseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Workout.WorkoutName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.WorkoutOrder)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RepsNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetsNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Exercise.ExerciseName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Workout.WorkoutName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.StepId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.StepId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.StepId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FlexGainsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="CommentId" />
+    </Key>
+    <Property Name="CommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="WorkoutId" Type="Int32" />
+    <Property Name="CommentDateTime" Type="DateTime" Precision="3" />
+    <Property Name="TextBody" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Workout" Relationship="Self.FK__Comment__Workout__44FF419A" FromRole="Comment" ToRole="Workout" />
+    <NavigationProperty Name="Account" Relationship="FlexGainsModel.FK__Comment__UserId__440B1D61" FromRole="Comment" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="Exercise">
+    <Key>
+      <PropertyRef Name="ExerciseId" />
+    </Key>
+    <Property Name="ExerciseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ExerciseName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ExerciseDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="GroupId" Type="Int32" />
+    <NavigationProperty Name="MuscleGroup" Relationship="Self.FK__Exercise__GroupI__3A81B327" FromRole="Exercise" ToRole="MuscleGroup" />
+    <NavigationProperty Name="WorkoutSteps" Relationship="Self.FK__WorkoutSt__Exerc__412EB0B6" FromRole="Exercise" ToRole="WorkoutStep" />
+  </EntityType>
+  <EntityType Name="MuscleGroup">
+    <Key>
+      <PropertyRef Name="GroupId" />
+    </Key>
+    <Property Name="GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GroupName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Exercises" Relationship="Self.FK__Exercise__GroupI__3A81B327" FromRole="MuscleGroup" ToRole="Exercise" />
+  </EntityType>
+  <EntityType Name="Workout">
+    <Key>
+      <PropertyRef Name="WorkoutId" />
+    </Key>
+    <Property Name="WorkoutId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorkoutName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Comments" Relationship="Self.FK__Comment__Workout__44FF419A" FromRole="Workout" ToRole="Comment" />
+    <NavigationProperty Name="WorkoutSteps" Relationship="Self.FK__WorkoutSt__Worko__403A8C7D" FromRole="Workout" ToRole="WorkoutStep" />
+    <NavigationProperty Name="Account" Relationship="FlexGainsModel.FK__Workout__UserId__3D5E1FD2" FromRole="Workout" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="WorkoutStep">
+    <Key>
+      <PropertyRef Name="StepId" />
+    </Key>
+    <Property Name="StepId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorkoutId" Type="Int32" />
+    <Property Name="ExerciseId" Type="Int32" />
+    <Property Name="WorkoutOrder" Type="Byte" />
+    <Property Name="RepsNumber" Type="Int32" />
+    <Property Name="SetsNumber" Type="Int32" />
+    <NavigationProperty Name="Exercise" Relationship="Self.FK__WorkoutSt__Exerc__412EB0B6" FromRole="WorkoutStep" ToRole="Exercise" />
+    <NavigationProperty Name="Workout" Relationship="Self.FK__WorkoutSt__Worko__403A8C7D" FromRole="WorkoutStep" ToRole="Workout" />
+  </EntityType>
+  <Association Name="FK__Comment__Workout__44FF419A">
+    <End Role="Workout" Type="Self.Workout" Multiplicity="0..1" />
+    <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Workout">
+        <PropertyRef Name="WorkoutId" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="WorkoutId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Exercise__GroupI__3A81B327">
+    <End Role="MuscleGroup" Type="Self.MuscleGroup" Multiplicity="0..1" />
+    <End Role="Exercise" Type="Self.Exercise" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MuscleGroup">
+        <PropertyRef Name="GroupId" />
+      </Principal>
+      <Dependent Role="Exercise">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__WorkoutSt__Exerc__412EB0B6">
+    <End Role="Exercise" Type="Self.Exercise" Multiplicity="0..1" />
+    <End Role="WorkoutStep" Type="Self.WorkoutStep" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Exercise">
+        <PropertyRef Name="ExerciseId" />
+      </Principal>
+      <Dependent Role="WorkoutStep">
+        <PropertyRef Name="ExerciseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__WorkoutSt__Worko__403A8C7D">
+    <End Role="Workout" Type="Self.Workout" Multiplicity="0..1" />
+    <End Role="WorkoutStep" Type="Self.WorkoutStep" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Workout">
+        <PropertyRef Name="WorkoutId" />
+      </Principal>
+      <Dependent Role="WorkoutStep">
+        <PropertyRef Name="WorkoutId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FlexGainsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Comments" EntityType="Self.Comment" />
+    <EntitySet Name="Exercises" EntityType="Self.Exercise" />
+    <EntitySet Name="MuscleGroups" EntityType="Self.MuscleGroup" />
+    <EntitySet Name="Workouts" EntityType="Self.Workout" />
+    <EntitySet Name="WorkoutSteps" EntityType="Self.WorkoutStep" />
+    <AssociationSet Name="FK__Comment__Workout__44FF419A" Association="Self.FK__Comment__Workout__44FF419A">
+      <End Role="Workout" EntitySet="Workouts" />
+      <End Role="Comment" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Exercise__GroupI__3A81B327" Association="Self.FK__Exercise__GroupI__3A81B327">
+      <End Role="MuscleGroup" EntitySet="MuscleGroups" />
+      <End Role="Exercise" EntitySet="Exercises" />
+    </AssociationSet>
+    <AssociationSet Name="FK__WorkoutSt__Exerc__412EB0B6" Association="Self.FK__WorkoutSt__Exerc__412EB0B6">
+      <End Role="Exercise" EntitySet="Exercises" />
+      <End Role="WorkoutStep" EntitySet="WorkoutSteps" />
+    </AssociationSet>
+    <AssociationSet Name="FK__WorkoutSt__Worko__403A8C7D" Association="Self.FK__WorkoutSt__Worko__403A8C7D">
+      <End Role="Workout" EntitySet="Workouts" />
+      <End Role="WorkoutStep" EntitySet="WorkoutSteps" />
+    </AssociationSet>
+    <EntitySet Name="Accounts" EntityType="FlexGainsModel.Account" />
+    <AssociationSet Name="FK__Comment__UserId__440B1D61" Association="FlexGainsModel.FK__Comment__UserId__440B1D61">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Comment" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Workout__UserId__3D5E1FD2" Association="FlexGainsModel.FK__Workout__UserId__3D5E1FD2">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Workout" EntitySet="Workouts" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="UserRole" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Comments" Relationship="FlexGainsModel.FK__Comment__UserId__440B1D61" FromRole="Account" ToRole="Comment" />
+    <NavigationProperty Name="Workouts" Relationship="FlexGainsModel.FK__Workout__UserId__3D5E1FD2" FromRole="Account" ToRole="Workout" />
+  </EntityType>
+  <Association Name="FK__Comment__UserId__440B1D61">
+    <End Type="FlexGainsModel.Account" Role="Account" Multiplicity="0..1" />
+    <End Type="FlexGainsModel.Comment" Role="Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Workout__UserId__3D5E1FD2">
+    <End Type="FlexGainsModel.Account" Role="Account" Multiplicity="0..1" />
+    <End Type="FlexGainsModel.Workout" Role="Workout" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Workout">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

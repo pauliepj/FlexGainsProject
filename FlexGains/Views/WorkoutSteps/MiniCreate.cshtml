@@ -1,0 +1,109 @@
+﻿@using FlexGains.Models;
+@model FlexGains.Models.WorkoutStep
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    @Html.DropDownListFor(model=>model.Exercise.GroupId, (SelectList) ViewBag.AllMuscleGroups)
+    <div style="display:none" id="mapControl">
+        @foreach(KeyValuePair<MuscleGroup, List<Exercise>>KVP in ViewBag.MuscleGroupMap)
+        {
+            <div id="@("MuscleGroup_"+ KVP.Key.GroupId)">
+                @foreach(Exercise exercise in KVP.Value)
+                {
+                    <div>@exercise.ExerciseId:@exercise.ExerciseName</div>
+
+                }
+
+            </div>
+        }
+
+    </div>
+
+
+    <div class="form-horizontal">
+        <h4>WorkoutStep</h4>
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.WorkoutId, "WorkoutId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("WorkoutId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.WorkoutId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExerciseId, "ExerciseId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ListBox("ExerciseId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ExerciseId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.WorkoutOrder, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.WorkoutOrder, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.WorkoutOrder, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RepsNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RepsNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RepsNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SetsNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SetsNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SetsNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval") 
+    <script type="text/javascript">
+        
+function filter(GroupId) {
+    var exerciseElement = $('#ExerciseId')
+    exerciseElement.empty()
+    var groupDiv = $("#MuscleGroup_" + GroupId)
+    for (var i = 0; i < groupDiv.children().length; i++)
+    {
+        var child = groupDiv.children()[i]
+        var exerciseSplit = child.innerText.split(":")
+        var option = $("<option value=" + exerciseSplit[0] + ">" + exerciseSplit[1] + "</option>")
+        exerciseElement.append(option)
+    }
+        }
+        $('#Exercise_GroupId').change(function () {
+    filter($(this).val())
+        })
+
+    </script>
+}
