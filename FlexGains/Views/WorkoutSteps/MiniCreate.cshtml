@@ -5,13 +5,14 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+    <h2>@Html.DisplayFor(model => model.Workout.WorkoutName)</h2>
 
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    @Html.DropDownListFor(model=>model.Exercise.GroupId, (SelectList) ViewBag.AllMuscleGroups)
+    @Html.DropDownListFor(model=>model.Exercise.GroupId, (SelectList) ViewBag.AllMuscleGroups, "Please Select a Muscle Group")
+
     <div style="display:none" id="mapControl">
         @foreach(KeyValuePair<MuscleGroup, List<Exercise>>KVP in ViewBag.MuscleGroupMap)
         {
@@ -29,17 +30,12 @@
 
 
     <div class="form-horizontal">
-        <h4>WorkoutStep</h4>
+        <h4></h4>
         <hr />
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.WorkoutId, "WorkoutId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("WorkoutId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.WorkoutId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.HiddenFor(model => model.WorkoutId)
+        
 
         <div class="form-group">
             @Html.LabelFor(model => model.ExerciseId, "ExerciseId", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -49,13 +45,7 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.WorkoutOrder, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.WorkoutOrder, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.WorkoutOrder, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.HiddenFor(model => model.WorkoutOrder)
 
         <div class="form-group">
             @Html.LabelFor(model => model.RepsNumber, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -82,13 +72,18 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Finish", "Index", "Workouts")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval") 
     <script type="text/javascript">
-        
+
+        $(document).ready(function ()
+        {
+            var exerciseElement = $('#ExerciseId')
+            exerciseElement.empty()
+        })
 function filter(GroupId) {
     var exerciseElement = $('#ExerciseId')
     exerciseElement.empty()

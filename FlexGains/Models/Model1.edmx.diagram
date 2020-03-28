@@ -6,8 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="1aec87bb72214dd3b14b5afda2be5a44" Name="Diagram1">
         <EntityTypeShape EntityType="FlexGainsModel.Comment" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="FlexGainsModel.Exercise" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="FlexGainsModel.MuscleGroup" Width="1.5" PointX="0.75" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="FlexGainsModel.Exercise" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="FlexGainsModel.MuscleGroup" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
         <EntityTypeShape EntityType="FlexGainsModel.Workout" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="FlexGainsModel.WorkoutStep" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
         <AssociationConnector Association="FlexGainsModel.FK__Comment__Workout__44FF419A" ManuallyRouted="false" />

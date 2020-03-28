@@ -1,4 +1,5 @@
-﻿@model FlexGains.Models.Workout
+﻿@using Microsoft.AspNet.Identity;
+@model FlexGains.Models.Workout
 
 @{
     ViewBag.Title = "Details";
@@ -7,30 +8,81 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Workout</h4>
+    <h4>@Html.DisplayFor(model => model.WorkoutName)</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.WorkoutName)
-        </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.WorkoutName)
-        </dd>
+            <table class="table">
+                <tr>
+                    <th>
+                        Exercise
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Order
+                    </th>
+                    <th>
+                        Reps
+                    </th>
+                    <th>
+                        Sets
+                    </th>
+                </tr>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Account.UserName)
-        </dt>
+                @foreach (var item in Model.WorkoutSteps)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Exercise.ExerciseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Exercise.ExerciseDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkoutOrder)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RepsNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SetsNumber)
+                </td>
+                <td>
+                    @if (Model.UserId == User.Identity.GetUserId())
+                    {
+                        <text>@Html.ActionLink("Delete", "Delete", "WorkoutSteps", new { id = item.StepId }) |</text>
+                    }
+                </td>
+            </tr>
+                }
 
-        <dd>
-            @Html.DisplayFor(model => model.Account.UserName)
-        </dd>
-       
-        </dd>
+            </table> 
+</dd>
     </dl>
 </div>
+<div>
+    @if (Model.Comments.Any())
+    {
+        Html.RenderAction("Index", "Comments", new { id = Model.WorkoutId });
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+        <text>@Html.Action("Create", "Comments", new { id = Model.WorkoutId })</text>
 
+    }
+</div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.WorkoutId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (Model.UserId == User.Identity.GetUserId())
+    {
+        <text>@Html.ActionLink("Edit", "Edit", new { id = Model.WorkoutId }) |</text>
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+        <text> @Html.ActionLink("My Workouts", "Index", new { id = true })|</text>
+    }
+    @Html.ActionLink("All Workouts", "Index")|
+
+    @Html.ActionLink("All Workouts in this Muscle Group", "ByMuscleGroup", new { id = Model.GetType() })
 </p>

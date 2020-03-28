@@ -1,0 +1,54 @@
+﻿@model FlexGains.Models.MuscleGroupSelectionViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.EnumDropDownListFor(model => model.groupId, "Please Select a Muscle Group")
+    </p>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="button" onclick="SubmitSearch()" value="Search" class="btn btn-default">Search</button>
+        </div>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                Workout Name
+            </th>
+            <th>
+                User Name
+            </th>
+        </tr>
+        @if (Model?.workouts != null)
+        {
+            foreach (var item in Model.workouts)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WorkoutName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account.UserName)
+                    </td>
+                    <td>
+                        
+                        @Html.ActionLink("Details", "Details", new { id = item.WorkoutId })
+
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+}
+@section scripts{<script type="text/javascript">
+    function SubmitSearch() {
+        var selectOptions = $("#groupId").val();
+        window.location = "/Workouts/ByMuscleGroup/" + selectOptions;
+    }
+
+     </script>}

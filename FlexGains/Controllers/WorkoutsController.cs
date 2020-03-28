@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FlexGains.Models;
+using Microsoft.AspNet.Identity;
 
 namespace FlexGains.Controllers
 {
@@ -15,17 +16,31 @@ namespace FlexGains.Controllers
         private FlexGainsEntities db = new FlexGainsEntities();
 
         // GET: Workouts
-        [Authorize(Roles = "User, Trainer, Admin")]
-        public ActionResult Index()
+        
+
+        public ActionResult Index(bool? id)
         {
-            var workouts = db.Workouts.Include(w => w.Account);
-            return View(workouts.ToList());
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
+            ViewBag.isOwnView = id ?? false;
+            List<Workout> workouts;
+            if(ViewBag.isOwnView)
+            {
+                var userId = User.Identity.GetUserId();
+                workouts = db.Accounts.Find(userId).Workouts.ToList();
+            }
+            else
+            {
+                workouts = db.Workouts.ToList();
+            }
+            return View(workouts);
         }
-        [Authorize(Roles = "User, Trainer, Admin")]
+
+        
         // GET: Workouts/Details/5
 
         public ActionResult Details(int? id)
         {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -43,6 +58,7 @@ namespace FlexGains.Controllers
         
         public ActionResult Create()
         {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
             ViewBag.UserName = new SelectList(db.Accounts, "UserName", "Email");
             return View();
         }
@@ -54,21 +70,46 @@ namespace FlexGains.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "WorkoutId,WorkoutName,UserName")] Workout workout)
         {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
             if (ModelState.IsValid)
             {
+                var userId = User.Identity.GetUserId();
+                workout.UserId = userId;
                 db.Workouts.Add(workout);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("MiniCreate", "WorkoutSteps", new {id = workout.WorkoutId});
             }
 
             ViewBag.UserName = new SelectList(db.Accounts, "UserName", "Email", workout.UserId);
             return View(workout);
         }
 
+        public ActionResult ByMuscleGroup(WorkoutClass? id)
+        {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
+            ViewBag.AllMuscleGroups = new SelectList(db.MuscleGroups, "GroupId", "GroupName");
+            if (id != null)
+            {
+                var model = new MuscleGroupSelectionViewModel();
+                model.groupId = id.Value;
+                var workouts = db.Workouts.AsEnumerable().Where(w => w.GetType() == id.Value);
+                model.workouts = workouts.ToList();
+                return View(model);
+
+            }
+            return View();
+
+
+
+        }
+
+
+
         // GET: Workouts/Edit/5
         [Authorize(Roles = "User, Trainer, Admin")]
         public ActionResult Edit(int? id)
         {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -91,6 +132,7 @@ namespace FlexGains.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "WorkoutId,WorkoutName,UserId")] Workout workout)
         {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
             if (ModelState.IsValid)
             {
                 db.Entry(workout).State = EntityState.Modified;
@@ -105,6 +147,7 @@ namespace FlexGains.Controllers
         [Authorize(Roles = "User, Trainer, Admin")]
         public ActionResult Delete(int? id)
         {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -123,7 +166,10 @@ namespace FlexGains.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            ViewBag.UserDisplayName = db.Accounts.Find(User.Identity.GetUserId())?.UserName;
             Workout workout = db.Workouts.Find(id);
+            workout.WorkoutSteps.Clear();
+            db.SaveChanges();
             db.Workouts.Remove(workout);
             db.SaveChanges();
             return RedirectToAction("Index");

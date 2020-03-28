@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FlexGains.Models;
+using Microsoft.AspNet.Identity;
 
 namespace FlexGains.Controllers
 {
@@ -15,10 +16,10 @@ namespace FlexGains.Controllers
         private FlexGainsEntities db = new FlexGainsEntities();
 
         // GET: Comments
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-            var comments = db.Comments.Include(c => c.Account).Include(c => c.Workout);
-            return View(comments.ToList());
+            var comments = db.Workouts.Find(id).Comments.OrderByDescending(c => c.CommentDateTime);
+            return PartialView(comments.ToList());
         }
 
         // GET: Comments/Details/5
@@ -35,32 +36,40 @@ namespace FlexGains.Controllers
             }
             return View(comment);
         }
-
+        [Authorize]
         // GET: Comments/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            ViewBag.UserId = new SelectList(db.Accounts, "UserId", "Email");
-            ViewBag.WorkoutId = new SelectList(db.Workouts, "WorkoutId", "WorkoutName");
-            return View();
+            if (Request.Url.ToString().ToLower().Contains("comments/create"))
+            {
+                return RedirectToAction("Details", "Workouts", new { id = id });
+            }
+            var model = new Comment {UserId= User.Identity.GetUserId(), WorkoutId = id};         
+            
+            return PartialView(model);
         }
 
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CommentId,UserId,WorkoutId,CommentDateTime,TextBody")] Comment comment)
+        public void Create([Bind(Include = "CommentId,UserId,WorkoutId,TextBody")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.CommentDateTime = DateTime.Now;
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                var workout = db.Workouts.Find(comment.WorkoutId);
+
+                ControllerContext.HttpContext.Response.Redirect(ControllerContext.HttpContext.Request.Url.ToString());
+
+                //return RedirectToAction("Details", "Workouts", new {id = comment.WorkoutId });
             }
 
             ViewBag.UserId = new SelectList(db.Accounts, "UserId", "Email", comment.UserId);
             ViewBag.WorkoutId = new SelectList(db.Workouts, "WorkoutId", "WorkoutName", comment.WorkoutId);
-            return View(comment);
         }
 
         // GET: Comments/Edit/5
@@ -119,9 +128,10 @@ namespace FlexGains.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Comment comment = db.Comments.Find(id);
+            var workout = comment.WorkoutId;
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Workouts", new {id = workout });
         }
 
         protected override void Dispose(bool disposing)

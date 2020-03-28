@@ -18,11 +18,10 @@
     <!-- Nav -->
     <nav id="menu">
         <ul class="links">
-            <li><a href="https://localhost:44314/Account/Login">Login</a></li>
-            <li><a href="https://localhost:44314/Home/index">Home</a></li>
-            <li><a href="#">Browse by Muscle Group</a></li>
-            <li><a href="https://localhost:44314/Workouts/Create">Create Your Workout</a></li>
-            <li><a href="#">Your Saved Workouts</a></li>
+            @Html.Partial("_LoginPartial")
+            <li><a href="/Home/index">Home</a></li>
+            <li><a href="/Workouts/ByMuscleGroup">Browse by Muscle Group</a></li>
+
         </ul>
     </nav>
 

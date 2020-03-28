@@ -1,27 +1,21 @@
-﻿@model IEnumerable<FlexGains.Models.Comment>
+﻿@using Microsoft.AspNet.Identity;
+@model IEnumerable<FlexGains.Models.Comment>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CommentDateTime)
+            Comment Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TextBody)
+            @Html.DisplayNameFor(model => model.Account.UserName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Account.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Workout.WorkoutName)
+            Comment
         </th>
         <th></th>
     </tr>
@@ -29,23 +23,23 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.CommentDateTime)
+            @item.CommentDateTime.Value.ToString("MM/dd/yyyy")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Account.UserName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TextBody)
         </td>
+        
+
         <td>
-            @Html.DisplayFor(modelItem => item.Account.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Workout.WorkoutName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CommentId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CommentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CommentId })
+            @if (item.UserId == User.Identity.GetUserId() || User.IsInRole("Admin")) 
+            { 
+            <text>@Html.ActionLink("Edit", "Edit", new { id=item.CommentId }) |</text>
+            <text>@Html.ActionLink("Delete", "Delete", new { id=item.CommentId })</text>
+            }
         </td>
     </tr>
 }
-
 </table>
