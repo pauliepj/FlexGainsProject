@@ -99,14 +99,21 @@ namespace FlexGains.Models
             {
                 return WorkoutClass.Obliques;
             }
-            else if (this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back") && this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest")
-                && this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName != "Legs"))
+            else if ((this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back")|| this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back/Biceps")
+                || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Biceps") || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Triceps")
+                || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest/Triceps"))
+                &&((this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back") || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back/Biceps")
+                || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Biceps") || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Triceps")
+                || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest/Triceps")||this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest"))
+                    && this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName != "Legs")))
+                
             {
                 return WorkoutClass.UpperBody;
             }
             else if ((this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back") || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back/Biceps")
                 || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Back/Biceps")) && (this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest/Triceps")
-                || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest")) && this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Legs"))
+                || this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest")|| this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Chest/Triceps"))
+                && this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Legs"))
             {
                 return WorkoutClass.FullBody;
             }

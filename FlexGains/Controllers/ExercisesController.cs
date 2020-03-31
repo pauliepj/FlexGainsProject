@@ -37,6 +37,7 @@ namespace FlexGains.Controllers
         }
 
         // GET: Exercises/Create
+        [Authorize(Roles = "Admin, User, Trainer")]
         public ActionResult Create()
         {
             ViewBag.GroupId = new SelectList(db.MuscleGroups, "GroupId", "GroupName");
@@ -46,6 +47,7 @@ namespace FlexGains.Controllers
         // POST: Exercises/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, User, Trainer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ExerciseId,ExerciseName,ExerciseDescription,GroupId")] Exercise exercise)
@@ -62,6 +64,7 @@ namespace FlexGains.Controllers
         }
 
         // GET: Exercises/Edit/5
+        [Authorize(Roles = "Admin, User, Trainer")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -80,6 +83,7 @@ namespace FlexGains.Controllers
         // POST: Exercises/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, User, Trainer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ExerciseId,ExerciseName,ExerciseDescription,GroupId")] Exercise exercise)
@@ -93,7 +97,7 @@ namespace FlexGains.Controllers
             ViewBag.GroupId = new SelectList(db.MuscleGroups, "GroupId", "GroupName", exercise.GroupId);
             return View(exercise);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Exercises/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -108,8 +112,8 @@ namespace FlexGains.Controllers
             }
             return View(exercise);
         }
-
         // POST: Exercises/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
