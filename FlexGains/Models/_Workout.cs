@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -93,7 +94,7 @@ namespace FlexGains.Models
                 }
                 else
                 {
-                    return WorkoutClass.Unknown;
+                    return WorkoutClass.Custom;
                 }
             }
             else if (this.WorkoutSteps.Any(s => s.Exercise.MuscleGroup.GroupName == "Legs"))
@@ -110,15 +111,34 @@ namespace FlexGains.Models
                 }
                 else
                 {
-                    return WorkoutClass.Unknown;
+                    return WorkoutClass.Custom;
                 }
             }
             else
             {
-                return WorkoutClass.Unknown;
+                return WorkoutClass.Custom;
             }
         }
     }
-    public enum WorkoutClass {Unknown, Arm, Bicep, BackAndBi, Tricep, ChestAndTri, Chest, Back, Abdominals, Legs, FullBody, Obliques, UpperBody}
+    public enum WorkoutClass 
+    {
+        Custom, 
+        Arm, 
+        Bicep, 
+        [Display(Name ="Back/Biceps")]
+        BackAndBi, 
+        Tricep,
+        [Display(Name = "Chest/Triceps")]
+        ChestAndTri, 
+        Chest, 
+        Back, 
+        Abdominals, 
+        Legs,
+        [Display(Name = "Full Body")]
+        FullBody, 
+        Obliques,
+        [Display(Name = "Upper Body")]
+        UpperBody
+    }
 
 }

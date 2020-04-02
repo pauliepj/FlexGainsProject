@@ -167,7 +167,7 @@ namespace FlexGains.Controllers
             WorkoutStep workoutStep = db.WorkoutSteps.Find(id);
             db.WorkoutSteps.Remove(workoutStep);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Workouts");
         }
 
         protected override void Dispose(bool disposing)

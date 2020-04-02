@@ -84,7 +84,7 @@ namespace FlexGains.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        [Display(Name = "Check the box if you are a trainer")]
+        [Display(Name = "Check the box if you are a trainer. Other users will see that your workouts are made by a trainer.")]
         public bool IsTrainer { get; set; }
     }
 

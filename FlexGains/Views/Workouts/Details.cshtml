@@ -52,7 +52,7 @@
                 <td>
                     @if (Model.UserId == User.Identity.GetUserId())
                     {
-                        <text>@Html.ActionLink("Delete", "Delete", "WorkoutSteps", new { id = item.StepId }) |</text>
+                        <text>@Html.ActionLink("Delete", "Delete", "WorkoutSteps", new { id = item.WorkoutId}, null)</text>
                     }
                 </td>
             </tr>

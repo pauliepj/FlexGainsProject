@@ -56,7 +56,7 @@ namespace FlexGains.Controllers
             {
                 db.Exercises.Add(exercise);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Workouts");
             }
 
             ViewBag.GroupId = new SelectList(db.MuscleGroups, "GroupId", "GroupName", exercise.GroupId);
