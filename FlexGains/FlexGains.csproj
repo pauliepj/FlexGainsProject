@@ -238,6 +238,7 @@
     <Content Include="Images\banner3.jpg" />
     <Content Include="Images\banner.jpg" />
     <Content Include="Images\banner2.jpg" />
+    <Content Include="Images\FlexGainsLogo-01.png" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
